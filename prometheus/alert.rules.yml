@@ -1,0 +1,38 @@
+groups:
+  - name: roomkit-health
+    rules:
+      - alert: RoomKitOffline
+        expr: roomos_device_online == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Room Kit ist offline"
+          description: "Das RoomOS-Gerät {{ $labels.device }} meldet offline."
+
+      - alert: RoomKitLowHealthScore
+        expr: roomos_health_score < 70
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Room Kit Health Score niedrig"
+          description: "Health Score von {{ $labels.device }} liegt unter 70."
+
+      - alert: RoomKitHighPacketLoss
+        expr: roomos_packet_loss > 2
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Paketverlust erkannt"
+          description: "Paketverlust bei {{ $labels.device }} liegt über 2 Prozent."
+
+      - alert: RoomKitHighJitter
+        expr: roomos_jitter_ms > 30
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Hoher Jitter erkannt"
+          description: "Jitter bei {{ $labels.device }} liegt über 30 ms."
